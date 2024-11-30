@@ -15,7 +15,7 @@ class Ind1 : AbstractTest() {
     private val startUrl = "https://www.drom.ru"
 
     @Test
-    fun mainPage() {
+    fun testMainPage() {
         driver.get(startUrl)
         val wait = WebDriverWait(driver, Duration.ofSeconds(10))
         val expectedTitle = "Дром - цены на машины"
@@ -24,7 +24,7 @@ class Ind1 : AbstractTest() {
     }
 
     @Test
-    fun navigation() {
+    fun testNavigation() {
         driver.get(startUrl)
         val wait = WebDriverWait(driver, Duration.ofSeconds(10))
         val showMoreBtn =
@@ -35,12 +35,12 @@ class Ind1 : AbstractTest() {
             wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@data-ftid='component_cars-list']//a[text()='BMW']")))
         lincolnBtn.click()
 
-        wait.until(ExpectedConditions.urlToBe("https://auto.drom.ru/BMW/"))
-        assertEquals("https://auto.drom.ru/BMW/", driver.currentUrl, "URL не соответствует ожидаемому")
+        wait.until(ExpectedConditions.urlToBe("https://auto.drom.ru/bmw/"))
+        assertContains("bmw", driver.currentUrl, "URL не соответствует ожидаемому")
     }
 
     @Test
-    fun checkVin() {
+    fun testCheckVin() {
         driver.get(startUrl)
         val wait = WebDriverWait(driver, Duration.ofSeconds(10))
 
@@ -64,7 +64,7 @@ class Ind1 : AbstractTest() {
     }
 
     @Test
-    fun carousel() {
+    fun testCarousel() {
         driver.get(startUrl)
         val wait = WebDriverWait(driver, Duration.ofSeconds(10))
 
@@ -89,5 +89,24 @@ class Ind1 : AbstractTest() {
         val newAlt = newFirstSlide.findElement(By.cssSelector("img")).getAttribute("alt")
 
         assertNotEquals(oldAlt, newAlt, "Первый слайд карусели не изменился после перетаскивания")
+    }
+
+    @Test
+    fun openAdFromCarousel() {
+        driver.get(startUrl)
+        val wait = WebDriverWait(driver, Duration.ofSeconds(10))
+
+        val carousel =
+            wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@data-ftid='component_premium-carousel']")))
+        assertTrue(carousel.isDisplayed, "Карусель с объявлениями не отображается")
+
+        val ad =
+            wait.until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/div[7]/div[4]/div/div/div[2]")))
+        ad.click()
+
+        val leasing =
+            wait.until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/div[3]/div[4]/div[1]/div[1]/div[2]/div[2]")))
+
+        assertTrue(leasing.isDisplayed)
     }
 }
