@@ -3,7 +3,7 @@ plugins {
     kotlin("jvm")
 }
 
-group = "ru.samokat.stocks"
+group = "ru.edu.omgtu"
 version = "1.0-SNAPSHOT"
 
 repositories {
